@@ -31,7 +31,7 @@ project "ImGui"
 	includedirs
 	{
 		"../imgui",
-		"../SDL3/include"
+		"../SDL/include"
 	}
 
 	filter "system:windows"
