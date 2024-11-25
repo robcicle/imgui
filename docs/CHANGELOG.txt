@@ -36,6 +36,34 @@ HOW TO UPDATE?
 - Please report any issue!
 
 -----------------------------------------------------------------------
+ VERSION 1.91.6 WIP (In Progress)
+-----------------------------------------------------------------------
+
+Breaking changes:
+
+- Backends: DX12: Changed ImGui_ImplDX12_Init() signature to take a
+  ImGui_ImplDX12_InitInfo struct.
+  - Using the new API, application is now required to pass function pointers
+    to allocate/free SRV Descriptors.
+  - We provide convenience legacy fields to pass a single descriptor,
+    matching the old API, but upcoming features will want multiple.
+  - Legacy ImGui_ImplDX12_Init() signature is still supported (will obsolete).
+
+Other changes:
+
+- Error Handling: fixed cases where recoverable error handling would crash when 
+  processing errors outside of the NewFrame()..EndFrame() scope. (#1651)
+- Misc: changed embedded ProggyClean encoding to save a bit of binary space (~12kb to 9.5kb).
+- Misc: added IMGUI_DISABLE_DEFAULT_FONT to strip embedded font from binary. (#8161)
+  [@demonese]
+- Tools: binary_to_compressed_c: added -u8/-u32/-base85 export options.
+- Demo: example tree used by Property Editor & Selection demos properly freed
+  on application closure. (#8158) [@Legulysse]
+- Examples: Win32+DX12: Using a basic free-list allocator to manage multiple
+  SRV descriptors.
+
+
+-----------------------------------------------------------------------
  VERSION 1.91.5 (Released 2024-11-07)
 -----------------------------------------------------------------------
 
@@ -64,6 +92,11 @@ Other changes:
   between _Header and _HeaderHovered which was introduced v1.91 (#8106, #1861)
 - Buttons: using ImGuiItemFlags_ButtonRepeat makes default button behavior use
   PressedOnClick instead of PressedOnClickRelease when unspecified.
+  - This is intended to make the +/- buttons of InputInt/InputFloat react on the
+    initial mouse down event.
+  - Note that it may reveal incorrect usage if you were using InputInt/InputFloat
+    without persistent storage by relying solely on e.g. IsItemDeactivatedAfterEdit():
+    this was never supported and didn't work consistantly (see #8149).
 - InputText: fixed a bug (regression in 1.91.2) where modifying text buffer within
   a callback would sometimes prevents further appending to the buffer.
 - Tabs, Style: made ImGuiCol_TabDimmedSelectedOverline alpha 0 (not visible) in default
@@ -85,6 +118,7 @@ Other changes:
 - Examples: SDL3+Vulkan: Added example. (#8084, #8085)
 - Examples: Android+OpenGL: Using ALooper_pollOnce() instead of ALooper_pollAll()
   which has been deprecated. (#8013) [@feather179]
+
 
 -----------------------------------------------------------------------
  VERSION 1.91.4 (Released 2024-10-18)
