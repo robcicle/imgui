@@ -2754,59 +2754,6 @@ bool ImGui::DragScalarN(const char* label, ImGuiDataType data_type, void* p_data
     return value_changed;
 }
 
-bool ImGui::DragScalarN_Colored(const char* label, ImGuiDataType data_type, void* p_data, int components, float v_speed, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags)
-{
-    ImGuiWindow* window = GetCurrentWindow();
-    if (window->SkipItems)
-        return false;
-
-    ImGuiContext& g = *GImGui;
-    bool value_changed = false;
-    BeginGroup();
-    PushID(label);
-    PushMultiItemsWidths(components, CalcItemWidth());
-    size_t type_size = GDataTypeInfo[data_type].Size;
-    for (int i = 0; i < components; i++)
-    {
-        static const ImU32 colors[] = {
-            0xBB0000FF, // red
-            0xBB00FF00, // green
-            0xBBFF0000, // blue
-            0xBBFFFFFF, // white for alpha?
-        };
-
-        PushID(i);
-        if (i > 0)
-            SameLine(0, g.Style.ItemInnerSpacing.x);
-        value_changed |= DragScalar("", data_type, p_data, v_speed, p_min, p_max, format, flags);
-
-        const ImVec2 min = GetItemRectMin();
-        const ImVec2 size = GetItemRectSize();
-        const ImVec2 max = GetItemRectMin() + ImVec2(0.1f * size.x, size.y);
-        const float spacing = 0;
-        const float halfSpacing = spacing / 2;
-
-        window->DrawList->AddRectFilled(min, max, colors[i], GetStyle().FrameRounding);
-        //->DrawList->AddLine({ min.x + spacing, max.y - halfSpacing }, { max.x - spacing, max.y - halfSpacing }, colors[i], 4);
-
-        SameLine(0, g.Style.ItemInnerSpacing.x);
-        PopID();
-        PopItemWidth();
-        p_data = (void*)((char*)p_data + type_size);
-    }
-    PopID();
-
-    const char* label_end = FindRenderedTextEnd(label);
-    if (label != label_end)
-    {
-        SameLine(0, g.Style.ItemInnerSpacing.x);
-        TextEx(label, label_end);
-    }
-
-    EndGroup();
-    return value_changed;
-}
-
 bool ImGui::DragFloat(const char* label, float* v, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 {
     return DragScalar(label, ImGuiDataType_Float, v, v_speed, &v_min, &v_max, format, flags);
@@ -2817,29 +2764,14 @@ bool ImGui::DragFloat2(const char* label, float v[2], float v_speed, float v_min
     return DragScalarN(label, ImGuiDataType_Float, v, 2, v_speed, &v_min, &v_max, format, flags);
 }
 
-bool ImGui::DragFloat2_Colored(const char* label, float v[2], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
-{
-    return DragScalarN_Colored(label, ImGuiDataType_Float, v, 2, v_speed, &v_min, &v_max, format, flags);
-}
-
 bool ImGui::DragFloat3(const char* label, float v[3], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 {
     return DragScalarN(label, ImGuiDataType_Float, v, 3, v_speed, &v_min, &v_max, format, flags);
 }
 
-bool ImGui::DragFloat3_Colored(const char* label, float v[3], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
-{
-    return DragScalarN_Colored(label, ImGuiDataType_Float, v, 3, v_speed, &v_min, &v_max, format, flags);
-}
-
 bool ImGui::DragFloat4(const char* label, float v[4], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 {
     return DragScalarN(label, ImGuiDataType_Float, v, 4, v_speed, &v_min, &v_max, format, flags);
-}
-
-bool ImGui::DragFloat4_Colored(const char* label, float v[4], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
-{
-    return DragScalarN_Colored(label, ImGuiDataType_Float, v, 4, v_speed, &v_min, &v_max, format, flags);
 }
 
 // NB: You likely want to specify the ImGuiSliderFlags_AlwaysClamp when using this.
