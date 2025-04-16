@@ -1,8 +1,10 @@
 project(ImGui)
 add_library(ImGui STATIC)
 
-target_include_directories(ImGui PUBLIC
+target_include_directories(ImGui 
+PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+PRIVATE
     ${CMAKE_SOURCE_DIR}/AntiLight/vendor/SDL/include
 )
 
