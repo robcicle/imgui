@@ -24,6 +24,8 @@ set(IMGUI_SOURCES
     backends/imgui_impl_sdl3.cpp
     backends/imgui_impl_opengl3.h
     backends/imgui_impl_opengl3.cpp
+    misc/cpp/imgui_stdlib.h
+    misc/cpp/imgui_stdlib.cpp
 )
 
 
